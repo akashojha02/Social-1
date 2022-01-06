@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% block content %}
+<h2>User Profile Page</h2>
+<br>
+<img src="{{user_page.profile.profile_img.url}}" alt="Smiley face" width='200' height='auto'>
+<p></p>
+<br>
+<ul>
+    <li><h4>User Name: {{user_page.username}}</h4></li>
+    <li><h4>Location: {{user_page.profile.location}}</h4></li>
+    <li><h4>Bio: {{user_page.profile.bio}}</h4></li>
+    
+</ul>
+<br>
+{% if user_page == request.user %}
+<a class="btn btn-primary btn-large" href="{% url 'accounts:edit_profile' %}">Edit</a>
+{% endif %}
+
+{% if user_page not in all_friend_requests and user_page != request.user %}
+    <a class="btn btn-primary btn-large" 
+        href="{% url 'accounts:send_friend_request' userID=user_page.id %}">Send a FriendRequest</a>        
+{% endif %}
+{%if user_page == request.user %}
+{% for friend_request in all_friend_requests %}
+<h4>Pending FriendRequest </h4>
+<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=request.user.id %}"><h4>Accept</h4></a>
+
+{% endfor %}
+{% endif %}                                        
+{% endblock %}

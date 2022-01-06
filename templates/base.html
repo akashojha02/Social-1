@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Star Social</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Alternative to Bootstrap 3 Glyphicons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'simplesocial/css/master.css' %}">
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-lg bg-dark mynav" role="navigation" id="navbar">
+        <div class="container-fluid">
+          <div class="navbar-nav align-items-center mynav">
+            <a class="navbar-brand mynav" href="{% url 'home' %}">Jaipur Social</a>
+          </div>
+          <div class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <form class="nav-item nav-link" method="GET" action= "{% url 'accounts:search-profile' %}" >
+              <div class="input-field">
+                  <input type="text" name="searched" value="{{ request.GET.q }}" placeholder="Search Here...">
+                 <button class="btn-outline-secondary" type="submit" name="action">Search</button>
+              </div>
+              </form>
+            <!-- <form class="nav-item nav-link" action= "{% url 'accounts:search-profile' %}" method="POST">
+              {% csrf_token %}
+              <input type="text" placeholder="username.." name='searched'>
+              <button type="submit" class="btn-outline-secondary" name="">Search</button>
+            </form> -->
+            <a class="nav-item nav-link" href="{% url 'posts:create' %}" class="btn btn-simple">Post</a>
+            <a href="{% url 'groups:all' %}" class="btn btn-simple">Groups</a>
+            <a href="{% url 'groups:create' %}" class="btn btn-simple">Create Group</a>
+            <a href="{% url 'accounts:logout' %}" class="btn btn-simple">({{request.user.username}}) Logout</a>
+            {% else %}
+            <a href="{% url 'groups:all' %}"class="btn btn-simple">Groups</a>
+            <a href="{% url 'accounts:signup'%}"class="btn btn-simple">Sign Up</a>
+            <a href="{% url 'accounts:login' %}"class="btn btn-simple">Log In</a>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+      <div class="container-fluid">
+        <br>
+        {% block content %}
+        {% endblock %}
+      </div>
+
+  </body>
+  <script type="text/javascript" src="{% static 'simplesocial/js/master.js' %}">
+  </script>
+  </html>
