@@ -25,7 +25,7 @@
 {%if user_page == request.user %}
 {% for friend_request in all_friend_requests %}
 <h4>Pending FriendRequest </h4>
-<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=request.user.id %}"><h4>Accept</h4></a>
+<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=friend_request.from_user.id %}"><h4>Accept</h4></a>
 
 {% endfor %}
 {% endif %}                                        

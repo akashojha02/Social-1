@@ -1,0 +1,82 @@
+[1mdiff --git a/accounts/__pycache__/models.cpython-39.pyc b/accounts/__pycache__/models.cpython-39.pyc[m
+[1mindex c705b88..41fed76 100644[m
+Binary files a/accounts/__pycache__/models.cpython-39.pyc and b/accounts/__pycache__/models.cpython-39.pyc differ
+[1mdiff --git a/accounts/__pycache__/views.cpython-39.pyc b/accounts/__pycache__/views.cpython-39.pyc[m
+[1mindex 6ad74fa..1a2c2b3 100644[m
+Binary files a/accounts/__pycache__/views.cpython-39.pyc and b/accounts/__pycache__/views.cpython-39.pyc differ
+[1mdiff --git a/accounts/models.py b/accounts/models.py[m
+[1mindex 84f89c5..617c8ae 100644[m
+[1m--- a/accounts/models.py[m
+[1m+++ b/accounts/models.py[m
+[36m@@ -10,8 +10,8 @@[m [mdef get_first_name(self):[m
+ [m
+ User.add_to_class("__str__", get_first_name)[m
+ # class User(auth.models.User,auth.models.PermissionsMixin):[m
+[31m-#     def __str__(self):[m
+[31m-#         return "@{}".format(self.username)[m
+[32m+[m[32m    # def __str__(self):[m
+[32m+[m[32m    #     return "@{}".format(self.username)[m
+ [m
+ [m
+ class Profile(models.Model):[m
+[1mdiff --git a/accounts/templates/accounts/user_detail.html b/accounts/templates/accounts/user_detail.html[m
+[1mindex ec91f7b..36b7dea 100644[m
+[1m--- a/accounts/templates/accounts/user_detail.html[m
+[1m+++ b/accounts/templates/accounts/user_detail.html[m
+[36m@@ -25,7 +25,7 @@[m
+ {%if user_page == request.user %}[m
+ {% for friend_request in all_friend_requests %}[m
+ <h4>Pending FriendRequest </h4>[m
+[31m-<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=request.user.id %}"><h4>Accept</h4></a>[m
+[32m+[m[32m<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=friend_request.from_user.id %}"><h4>Accept</h4></a>[m
+ [m
+ {% endfor %}[m
+ {% endif %}                                        [m
+[1mdiff --git a/accounts/views.py b/accounts/views.py[m
+[1mindex f7cc7be..51cf3f6 100644[m
+[1m--- a/accounts/views.py[m
+[1m+++ b/accounts/views.py[m
+[36m@@ -95,10 +95,11 @@[m [mdef send_friend_request(request, userID):[m
+ [m
+ @login_required[m
+ def accept_friend_request(request, requestID):[m
+[31m-    friend_request = Friend_Request.objects.get(id=requestID)[m
+[31m-    print(friend_request)[m
+[31m-    print(request.user)[m
+[31m-    print(friend_request.to_user) [m
+[32m+[m[32m    to_user = User.objects.get(id=request.user.id)[m
+[32m+[m[32m    from_user = User.objects.get(id=requestID)[m
+[32m+[m[32m    print(to_user)[m
+[32m+[m[32m    print(from_user)[m
+[32m+[m[32m    friend_request = Friend_Request.objects.get(from_user=from_user,to_user=to_user)[m
+     if friend_request.to_user == request.user:[m
+         friend_request.to_user.profile.friends.add(friend_request.from_user)[m
+         friend_request.from_user.profile.friends.add(friend_request.to_user)[m
+[1mdiff --git a/db.sqlite3 b/db.sqlite3[m
+[1mindex f5efeb8..e0dee81 100644[m
+Binary files a/db.sqlite3 and b/db.sqlite3 differ
+[1mdiff --git a/templates/base.html b/templates/base.html[m
+[1mindex b43e3ff..33786dd 100644[m
+[1m--- a/templates/base.html[m
+[1m+++ b/templates/base.html[m
+[36m@@ -24,7 +24,7 @@[m
+       <nav class="navbar navbar-expand-lg bg-dark mynav" role="navigation" id="navbar">[m
+         <div class="container-fluid">[m
+           <div class="navbar-nav align-items-center mynav">[m
+[31m-            <a class="navbar-brand mynav" href="{% url 'home' %}">Jaipur Social</a>[m
+[32m+[m[32m            <a class="navbar-brand mynav" href="{% url 'accounts:user_detail' user.id %}">Social</a>[m
+           </div>[m
+           <div class="navbar-nav ml-auto">[m
+             {% if user.is_authenticated %}[m
+[1mdiff --git a/templates/index.html b/templates/index.html[m
+[1mindex c0248ed..058bd3d 100644[m
+[1m--- a/templates/index.html[m
+[1m+++ b/templates/index.html[m
+[36m@@ -3,5 +3,7 @@[m
+ {% block content %}[m
+ [m
+   <h1>Welcome to Jaipur Social!</h1>[m
+[32m+[m[32m  <br>[m
+[32m+[m[41m  [m
+ [m
+ {% endblock %}[m

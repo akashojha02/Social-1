@@ -95,10 +95,11 @@ def send_friend_request(request, userID):
 
 @login_required
 def accept_friend_request(request, requestID):
-    friend_request = Friend_Request.objects.get(id=requestID)
-    print(friend_request)
-    print(request.user)
-    print(friend_request.to_user) 
+    to_user = User.objects.get(id=request.user.id)
+    from_user = User.objects.get(id=requestID)
+    print(to_user)
+    print(from_user)
+    friend_request = Friend_Request.objects.get(from_user=from_user,to_user=to_user)
     if friend_request.to_user == request.user:
         friend_request.to_user.profile.friends.add(friend_request.from_user)
         friend_request.from_user.profile.friends.add(friend_request.to_user)

@@ -10,8 +10,8 @@ def get_first_name(self):
 
 User.add_to_class("__str__", get_first_name)
 # class User(auth.models.User,auth.models.PermissionsMixin):
-#     def __str__(self):
-#         return "@{}".format(self.username)
+    # def __str__(self):
+    #     return "@{}".format(self.username)
 
 
 class Profile(models.Model):
