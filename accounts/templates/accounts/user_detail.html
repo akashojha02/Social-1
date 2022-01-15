@@ -14,19 +14,32 @@
     
 </ul>
 <br>
+<a class="btn btn-primary btn-large" href="{% url 'accounts:user_friend_list' user_page.id %}">Friend List</a>
 {% if user_page == request.user %}
 <a class="btn btn-primary btn-large" href="{% url 'accounts:edit_profile' %}">Edit</a>
 {% endif %}
 
-{% if user_page not in all_friend_requests and user_page != request.user %}
+{% if user_page != request.user %}
+{% if user_page not in q1 and user_page not in q2 and user_page not in q3 %}
     <a class="btn btn-primary btn-large" 
-        href="{% url 'accounts:send_friend_request' userID=user_page.id %}">Send a FriendRequest</a>        
-{% endif %}
+                 href="{% url 'accounts:send_friend_request' userID=user_page.id %}">
+                                                            Send a FriendRequest</a>
+{% elif user_page in q3%}
+    <a class="btn btn-primary btn-large" 
+                    href="{% url 'accounts:cancel_friend_request' userID=user_page.id %}">
+                                                            Cancel a FriendRequest</a>
+{% else %}
+    <a class="btn btn-primary btn-large" 
+                    href="{% url 'accounts:unfriend' userID=user_page.id %}">
+                                                            Unfriend</a>
+
+{% endif %}{% endif %}
 {%if user_page == request.user %}
 {% for friend_request in all_friend_requests %}
 <h4>Pending FriendRequest </h4>
-<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request' requestID=friend_request.from_user.id %}"><h4>Accept</h4></a>
-
+<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request'
+                         requestID=friend_request.from_user.id %}"><h4>Accept</h4></a>
 {% endfor %}
-{% endif %}                                        
+{% endif %}
+                                        
 {% endblock %}

@@ -35,3 +35,4 @@ class Friend_Request(models.Model):
                  on_delete=models.CASCADE)
     to_user = models.ForeignKey(User, related_name='to_user',
                  on_delete=models.CASCADE)
+                 

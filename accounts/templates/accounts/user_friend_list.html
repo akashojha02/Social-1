@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h2>Mutual friends for User: {{user_page}}</h2>
+{% for friends in mutual_friend %}
+<ul>
+    <li><h3>{{friends}}</h3></li>
+</ul>
+{% endfor %}
+
+<h2>Friend list for User: {{user_page}}</h2>
+{% for friends in friend_list %}
+<ul>
+    <li><h3>{{friends}}</h3></li>
+</ul>
+{% endfor %}
+
+{% endblock %}
