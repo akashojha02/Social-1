@@ -6,12 +6,13 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from geopy.distance import geodesic
 
 from accounts.models import Friend_Request
 from . import forms
 from django.core.paginator import Paginator
 
-from django.db.models import Q, query
+from django.db.models import Q
 from accounts.models import Profile
 from groups.models import Group
 from django.contrib.auth import get_user_model
@@ -29,23 +30,24 @@ class SignUp(CreateView):
 
 def user_detail(request, pk):
     user_page = User.objects.get(pk=pk)
+    all_friend_request_recived = []
+    all_friend_request_sent = []
     q1 = Friend_Request.objects.filter(to_user=request.user)
-    for item in q1:
-        all_friend_request_recived = []
+    for item in q1:        
         u=item.from_user
-        all_friend_request_recived.append(u)
+        all_friend_request_recived.append(u) #print(all_friend_request_recived)       
 
     q3 = Friend_Request.objects.filter(from_user=request.user)
-    for item in q3:
-        all_friend_request_sent = []
+    for item in q3:        
         u=item.to_user
-        all_friend_request_sent.append(u)
-
+        all_friend_request_sent.append(u) #print(all_friend_request_sent)
+    
+    
     logged_user = Profile.objects.get(user_id=request.user.id)
     logged_user_friends = logged_user.friends.all()  
     return render(request,  'accounts/user_detail.html', {'user_page':user_page, 
         'q1':all_friend_request_recived, 'q2':logged_user_friends,
-             'q3':all_friend_request_sent })
+             'q3':all_friend_request_sent,'all_friend_requests':q1 })
     
 
 def update_profile(request):
@@ -137,14 +139,32 @@ def friends_list(request,user_id):
 
 
 @login_required
-def unfriend(request, userID):       
+def unfriend(request, userID):
     removee = User.objects.get(id=userID)
-    print(removee)
     remover = User.objects.get(id=request.user.id)
-    print(remover)
 
     removee.profile.friends.remove(remover)
     remover.profile.friends.remove(removee)
-
     return HttpResponse('User is removed from Friends')
+
+
+def distance(request):    
+    friends = request.user.profile.friends.all()
+    km = int(request.GET.get('km'))
+    user_list = []
+    
+    for user in friends:
+        p1 = (user.profile.lat,user.profile.long)
+        p2 = (request.user.profile.lat,request.user.profile.long) #print(p1, p2)        
+
+        d = geodesic(p1, p2).km
+        print(user, d)
+        if d < km:            
+            user_list.append(user)    
+    print(km)
+    print(friends)
+    print(request.user.profile.lat)
+    print(user_list)
         
+    
+    return render(request, 'accounts/distance.html',{'user_list':user_list, 'km':km})

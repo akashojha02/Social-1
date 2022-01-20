@@ -25,6 +25,7 @@
         <div class="container-fluid">
           <div class="navbar-nav align-items-center mynav">
             <a class="navbar-brand mynav" href="{% url 'home' %}">Social</a>
+            <a class="navbar-brand mynav" href="{% url 'accounts:user_detail' user.id %}">Home</a>
           </div>
           <div class="navbar-nav ml-auto">
             {% if user.is_authenticated %}

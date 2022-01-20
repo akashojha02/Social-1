@@ -23,8 +23,11 @@ class Profile(models.Model):
     bio = models.CharField(max_length=50, blank=True)
     location = models.CharField(max_length=50, blank=True)
     dob = models.DateField(null=True, blank=True)
-
     friends = models.ManyToManyField(User, blank=True, related_name="friends")
+    lat= models.DecimalField(max_digits=8, decimal_places=6, default=0.0)
+    long = models.DecimalField(max_digits=8, decimal_places=6, default=0.0)
+    
+
 
     def __str__(self):
         return self.user.username

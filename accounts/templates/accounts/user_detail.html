@@ -33,13 +33,16 @@
                     href="{% url 'accounts:unfriend' userID=user_page.id %}">
                                                             Unfriend</a>
 
-{% endif %}{% endif %}
+{% endif %}{% endif %} <br><br>
 {%if user_page == request.user %}
+<h4>Pending Friend-Request </h4>
+
 {% for friend_request in all_friend_requests %}
-<h4>Pending FriendRequest </h4>
-<h4>{{friend_request.from_user}}:</h4><a href="{% url 'accounts:accept_friend_request'
-                         requestID=friend_request.from_user.id %}"><h4>Accept</h4></a>
+
+    <li><label for="accept"><h4>{{friend_request.from_user}}:</h4> </label>
+        <a class="btn btn-primary btn-large" id="accept" href="{% url 'accounts:accept_friend_request' 
+            requestID=friend_request.from_user.id %}">Accept</a><br></li>
+
 {% endfor %}
-{% endif %}
-                                        
+{% endif %}                                        
 {% endblock %}

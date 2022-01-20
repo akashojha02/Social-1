@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Here ai list of people which are under {{km}} km from you: </h4>
+
+<br>
+<ul>
+{% for user in user_list %}
+    <li><h4>{{user}}</h4></li>
+{% endfor %}
+</ul>
+{% endblock %}

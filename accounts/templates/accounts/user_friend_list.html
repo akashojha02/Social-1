@@ -15,5 +15,12 @@
     <li><h3>{{friends}}</h3></li>
 </ul>
 {% endfor %}
+<br>
+  <form action="{% url 'accounts:distance' %}" method="get">
+    <label for="vol"><h2>Try to find friends nearby in (between 0 and 5000km) from you :</h2></label>
+    <input type="range" id="vol" value="{{ request.GET.km }}" name="km" min="0" max="5000">
+    <input type="submit" value="Submit">
+  </form>
 
-{% endblock %}
+
+{% endblock %}"{% url 'accounts:user_detail' user.id %}"

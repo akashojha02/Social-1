@@ -4,7 +4,6 @@
     <h2>You searched for  </h2><br>
       {% for user in page_obj %}      
        <h2>User: <a href="{% url 'accounts:user_detail' user.id %}">{{user.username}}</a></h2><br>
-       
       {% endfor %}     
     
 <nav aria-label="Page navigation example">
